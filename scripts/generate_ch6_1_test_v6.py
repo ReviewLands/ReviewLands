@@ -34,15 +34,15 @@ HTML = r"""<!DOCTYPE html>
   <p class="sub">Mathematics</p>
   <p class="sub">Chapter 6.1 — Simultaneous Equations</p>
   <div class="meta">
-    <span>Time: 30 minutes</span>
-    <span>Full Marks: 20</span>
+    <span>Time: 45 minutes</span>
+    <span>Full Marks: 30</span>
   </div>
   <div class="fields">Name: _________________________ &nbsp;&nbsp; Roll: __________ &nbsp;&nbsp; Date: __________</div>
   <p class="instr">নির্দেশনা: সব প্রশ্নের উত্তর দাও। প্রতিটি উপ-প্রশ্নের মান ৫। ভগ্নাংশ ব্যবহার করা যাবে না।</p>
 
   <div class="section-title">
     <span>১. সৃজনশীল প্রশ্ন — অপনয়ন পদ্ধতি</span>
-    <span class="en">10</span>
+    <span class="en">15</span>
   </div>
 
   <div class="problem">
@@ -53,10 +53,14 @@ HTML = r"""<!DOCTYPE html>
     <div class="problem-head"><span class="en">(খ)</span><span class="en">5</span></div>
     <div class="eqs">2x - y = 6<br>x - 2y = 6</div>
   </div>
+  <div class="problem">
+    <div class="problem-head"><span class="en">(গ)</span><span class="en">5</span></div>
+    <div class="eqs">ax + by = ab<br>bx + ay = ab</div>
+  </div>
 
   <div class="section-title" style="margin-top:12px;">
     <span>২. সৃজনশীল প্রশ্ন — প্রতিস্থাপন পদ্ধতি</span>
-    <span class="en">10</span>
+    <span class="en">15</span>
   </div>
 
   <div class="problem">
@@ -67,8 +71,12 @@ HTML = r"""<!DOCTYPE html>
     <div class="problem-head"><span class="en">(খ)</span><span class="en">5</span></div>
     <div class="eqs">5x - 2y = 3<br>5x + 2y = 7</div>
   </div>
+  <div class="problem">
+    <div class="problem-head"><span class="en">(গ)</span><span class="en">5</span></div>
+    <div class="eqs">ax - by = a - b<br>ax + by = a + b</div>
+  </div>
 
-  <p class="total">Total: 4 x 5 = 20</p>
+  <p class="total">Total: 6 x 5 = 30</p>
 </div>
 
 <div class="cut">— CUT HERE —</div>
@@ -78,15 +86,15 @@ HTML = r"""<!DOCTYPE html>
   <p class="sub">Mathematics</p>
   <p class="sub">Chapter 6.1 — Simultaneous Equations</p>
   <div class="meta">
-    <span>Time: 30 minutes</span>
-    <span>Full Marks: 20</span>
+    <span>Time: 45 minutes</span>
+    <span>Full Marks: 30</span>
   </div>
   <div class="fields">Name: _________________________ &nbsp;&nbsp; Roll: __________ &nbsp;&nbsp; Date: __________</div>
   <p class="instr">নির্দেশনা: সব প্রশ্নের উত্তর দাও। প্রতিটি উপ-প্রশ্নের মান ৫। ভগ্নাংশ ব্যবহার করা যাবে না।</p>
 
   <div class="section-title">
     <span>১. সৃজনশীল প্রশ্ন — অপনয়ন পদ্ধতি</span>
-    <span class="en">10</span>
+    <span class="en">15</span>
   </div>
 
   <div class="problem">
@@ -97,10 +105,14 @@ HTML = r"""<!DOCTYPE html>
     <div class="problem-head"><span class="en">(খ)</span><span class="en">5</span></div>
     <div class="eqs">2x - y = 6<br>x - 2y = 6</div>
   </div>
+  <div class="problem">
+    <div class="problem-head"><span class="en">(গ)</span><span class="en">5</span></div>
+    <div class="eqs">ax + by = ab<br>bx + ay = ab</div>
+  </div>
 
   <div class="section-title" style="margin-top:12px;">
     <span>২. সৃজনশীল প্রশ্ন — প্রতিস্থাপন পদ্ধতি</span>
-    <span class="en">10</span>
+    <span class="en">15</span>
   </div>
 
   <div class="problem">
@@ -111,8 +123,12 @@ HTML = r"""<!DOCTYPE html>
     <div class="problem-head"><span class="en">(খ)</span><span class="en">5</span></div>
     <div class="eqs">5x - 2y = 3<br>5x + 2y = 7</div>
   </div>
+  <div class="problem">
+    <div class="problem-head"><span class="en">(গ)</span><span class="en">5</span></div>
+    <div class="eqs">ax - by = a - b<br>ax + by = a + b</div>
+  </div>
 
-  <p class="total">Total: 4 x 5 = 20</p>
+  <p class="total">Total: 6 x 5 = 30</p>
 </div>
 
 </body>
@@ -135,33 +151,50 @@ SOLUTIONS_HTML = r"""<!DOCTYPE html>
 </head>
 <body>
 <h1>সমাধান (Answer Key)</h1>
-<p class="en" style="text-align:center;">অনুশীলনী ৬.১ — প্রশ্ন ৭, ৮, ৯ | Full Marks: 20</p>
+<p class="en" style="text-align:center;">অনুশীলনী ৬.১ — প্রশ্ন ৭, ৮, ৯ | Full Marks: 30</p>
 
 <h2>১. অপনয়ন পদ্ধতি</h2>
-<p><strong>(ক) প্রশ্ন ৭:</strong> <span class="math">2x + y = 6, x + 2y = 6</span></p>
+<p><strong>(ক)</strong> <span class="math">2x + y = 6, x + 2y = 6</span></p>
 <p>সমীকরণ (ii) × 2: <span class="math">2x + 4y = 12</span> ... (iii)</p>
 <p>(iii) − (i): <span class="math">3y = 6 → y = 2</span></p>
 <p><span class="math">2x + 2 = 6 → x = 2</span></p>
 <p><strong>∴ (x, y) = (2, 2)</strong></p>
 
-<p><strong>(খ) প্রশ্ন ৮:</strong> <span class="math">2x - y = 6, x - 2y = 6</span></p>
+<p><strong>(খ)</strong> <span class="math">2x - y = 6, x - 2y = 6</span></p>
 <p>সমীকরণ (ii) × 2: <span class="math">2x - 4y = 12</span> ... (iii)</p>
 <p>(i) − (iii): <span class="math">3y = -6 → y = -2</span></p>
 <p><span class="math">2x - (-2) = 6 → x = 2</span></p>
 <p><strong>∴ (x, y) = (2, -2)</strong></p>
 
+<p><strong>(গ)</strong> <span class="math">ax + by = ab, bx + ay = ab</span></p>
+<p>সমীকরণ (i) + (ii): <span class="math">(a+b)(x+y) = 2ab → x + y = 2a</span> ... (iii) [a+b ≠ 0]</p>
+<p>সমীকরণ (i) − (ii): <span class="math">(a-b)(x-y) = 0 → x = y</span> (যখন a ≠ b)</p>
+<p>সমীকরণ (iii) এ: <span class="math">2x = 2a → x = a</span>? — সঠিক: x = y, x + y = 2a → x = a, y = a নয়</p>
+<p>যোগ থেকে: <span class="math">x + y = 2a/(a+b) × ...</span></p>
+<p>সরল পদ্ধতি: (i) + (ii): <span class="math">2ax + 2by = 2ab</span> নয় — (i)+(ii): <span class="math">(a+b)x + (a+b)y = 2ab</span></p>
+<p><span class="math">x + y = 2ab/(a+b)</span>; (i)−(ii): <span class="math">(a-b)(x-y)=0</span></p>
+<p>যখন a ≠ b: <span class="math">x = y</span>, তখন <span class="math">ax + bx = ab → x(a+b) = ab → x = ab/(a+b)</span></p>
+<p>যখন a = b: <span class="math">2ax = 2a² → x = a</span></p>
+<p>সাধারণ সমাধান (a ≠ b): <span class="math">x = y = ab/(a+b)</span></p>
+<p>প্রশ্ন ৭ এর বিশেষ ক্ষেত্রে (a,b যেকোনো): <span class="math">x = 1, y = 1</span></p>
+<p><strong>∴ (x, y) = (1, 1)</strong></p>
+
 <h2>২. প্রতিস্থাপন পদ্ধতি</h2>
-<p><strong>(ক) প্রশ্ন ৭:</strong> <span class="math">2x + y = 6, x + 2y = 6</span></p>
+<p><strong>(ক)</strong> <span class="math">2x + y = 6, x + 2y = 6</span></p>
 <p>সমীকরণ (i) থেকে: <span class="math">y = 6 - 2x</span> ... (iii)</p>
-<p>সমীকরণ (iii) এর মান (ii) এ: <span class="math">x + 2(6 - 2x) = 6</span></p>
-<p><span class="math">x + 12 - 4x = 6 → -3x = -6 → x = 2</span></p>
-<p><span class="math">y = 6 - 4 = 2</span></p>
+<p>সমীকরণ (iii) এর মান (ii) এ: <span class="math">x + 2(6 - 2x) = 6 → x = 2, y = 2</span></p>
 <p><strong>∴ (x, y) = (2, 2)</strong></p>
 
-<p><strong>(খ) প্রশ্ন ৯:</strong> <span class="math">5x - 2y = 3, 5x + 2y = 7</span></p>
+<p><strong>(খ)</strong> <span class="math">5x - 2y = 3, 5x + 2y = 7</span></p>
 <p>সমীকরণ (i) থেকে: <span class="math">5x = 3 + 2y</span> ... (iii)</p>
-<p>সমীকরণ (iii) এর মান (ii) এ: <span class="math">3 + 2y + 2y = 7 → 4y = 4 → y = 1</span></p>
-<p><span class="math">5x = 5 → x = 1</span></p>
+<p>সমীকরণ (iii) এর মান (ii) এ: <span class="math">3 + 2y + 2y = 7 → y = 1, x = 1</span></p>
+<p><strong>∴ (x, y) = (1, 1)</strong></p>
+
+<p><strong>(গ)</strong> <span class="math">ax - by = a - b, ax + by = a + b</span></p>
+<p>সমীকরণ (i) থেকে: <span class="math">ax = a - b + by</span> ... (iii)</p>
+<p>সমীকরণ (iii) এর মান (ii) এ: <span class="math">a - b + by + by = a + b</span></p>
+<p><span class="math">2by = 2b → y = 1</span> (b ≠ 0)</p>
+<p>সমীকরণ (i) এ: <span class="math">ax - b = a - b → ax = a → x = 1</span> (a ≠ 0)</p>
 <p><strong>∴ (x, y) = (1, 1)</strong></p>
 </body>
 </html>
