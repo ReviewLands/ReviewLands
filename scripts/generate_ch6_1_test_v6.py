@@ -20,15 +20,11 @@ HTML = r"""<!DOCTYPE html>
   .fields { font-family: 'Times New Roman', Times, serif; font-size: 11pt; margin-bottom: 8px; }
   .instr { font-size: 10pt; margin-bottom: 14px; line-height: 1.5; }
   .cut { text-align: center; font-family: 'Times New Roman', Times, serif; font-size: 9pt; border-top: 1px dashed #666; margin: 14px 0 10px; padding-top: 6px; }
-  .section-title { font-weight: 700; font-size: 12pt; margin: 0 0 4px; display: flex; justify-content: space-between; align-items: baseline; }
-  .section-note { font-size: 9pt; color: #333; margin-bottom: 10px; }
-  .problem { margin-bottom: 12px; }
-  .problem-head { font-family: 'Times New Roman', Times, serif; display: flex; justify-content: space-between; margin-bottom: 4px; }
-  .prompt { font-family: 'Times New Roman', Times, serif; margin: 0 0 4px 4px; }
-  .eqs { font-family: 'Times New Roman', Times, serif; margin: 0 0 2px 24px; line-height: 1.55; }
-  .ref { font-size: 8.5pt; color: #444; margin-left: 4px; line-height: 1.35; }
-  .ref-en { font-family: 'Times New Roman', Times, serif; font-size: 8.5pt; color: #444; margin-left: 4px; }
-  .total { font-family: 'Times New Roman', Times, serif; font-size: 10pt; text-align: right; margin-top: 6px; }
+  .section-title { font-weight: 700; font-size: 12pt; margin: 0 0 12px; display: flex; justify-content: space-between; align-items: baseline; }
+  .problem { margin-bottom: 14px; }
+  .problem-head { font-family: 'Times New Roman', Times, serif; display: flex; justify-content: space-between; margin-bottom: 6px; }
+  .eqs { font-family: 'Times New Roman', Times, serif; margin-left: 20px; line-height: 1.6; }
+  .total { font-family: 'Times New Roman', Times, serif; font-size: 10pt; text-align: right; margin-top: 8px; }
 </style>
 </head>
 <body>
@@ -48,42 +44,28 @@ HTML = r"""<!DOCTYPE html>
     <span>১. সৃজনশীল প্রশ্ন — অপনয়ন পদ্ধতি</span>
     <span class="en">10</span>
   </div>
-  <p class="section-note">অনুশীলনী ৬.১ — প্রশ্ন ৭ ও ৮ (ax + by = ab ধরন)</p>
 
   <div class="problem">
     <div class="problem-head"><span class="en">(ক)</span><span class="en">5</span></div>
-    <p class="prompt">Solve by the elimination method:</p>
     <div class="eqs">2x + y = 6<br>x + 2y = 6</div>
-    <div class="ref">[অনুশীলনী ৬.১ — প্রশ্ন ৭]</div>
-    <div class="ref-en">ax + by = ab, bx + ay = ab</div>
   </div>
   <div class="problem">
     <div class="problem-head"><span class="en">(খ)</span><span class="en">5</span></div>
-    <p class="prompt">Solve by the elimination method:</p>
     <div class="eqs">2x - y = 6<br>x - 2y = 6</div>
-    <div class="ref">[অনুশীলনী ৬.১ — প্রশ্ন ৮]</div>
-    <div class="ref-en">ax - by = ab, bx - ay = ab</div>
   </div>
 
-  <div class="section-title" style="margin-top:10px;">
+  <div class="section-title" style="margin-top:12px;">
     <span>২. সৃজনশীল প্রশ্ন — প্রতিস্থাপন পদ্ধতি</span>
     <span class="en">10</span>
   </div>
-  <p class="section-note">অনুশীলনী ৬.১ — প্রশ্ন ৭ ও ৯ (ax + by = ab ধরন)</p>
 
   <div class="problem">
     <div class="problem-head"><span class="en">(ক)</span><span class="en">5</span></div>
-    <p class="prompt">Solve by the substitution method:</p>
     <div class="eqs">2x + y = 6<br>x + 2y = 6</div>
-    <div class="ref">[অনুশীলনী ৬.১ — প্রশ্ন ৭]</div>
-    <div class="ref-en">ax + by = ab, bx + ay = ab</div>
   </div>
   <div class="problem">
     <div class="problem-head"><span class="en">(খ)</span><span class="en">5</span></div>
-    <p class="prompt">Solve by the substitution method:</p>
     <div class="eqs">5x - 2y = 3<br>5x + 2y = 7</div>
-    <div class="ref">[অনুশীলনী ৬.১ — প্রশ্ন ৯]</div>
-    <div class="ref-en">ax - by = a - b, ax + by = a + b</div>
   </div>
 
   <p class="total">Total: 4 x 5 = 20</p>
@@ -106,42 +88,28 @@ HTML = r"""<!DOCTYPE html>
     <span>১. সৃজনশীল প্রশ্ন — অপনয়ন পদ্ধতি</span>
     <span class="en">10</span>
   </div>
-  <p class="section-note">অনুশীলনী ৬.১ — প্রশ্ন ৭ ও ৮ (ax + by = ab ধরন)</p>
 
   <div class="problem">
     <div class="problem-head"><span class="en">(ক)</span><span class="en">5</span></div>
-    <p class="prompt">Solve by the elimination method:</p>
     <div class="eqs">2x + y = 6<br>x + 2y = 6</div>
-    <div class="ref">[অনুশীলনী ৬.১ — প্রশ্ন ৭]</div>
-    <div class="ref-en">ax + by = ab, bx + ay = ab</div>
   </div>
   <div class="problem">
     <div class="problem-head"><span class="en">(খ)</span><span class="en">5</span></div>
-    <p class="prompt">Solve by the elimination method:</p>
     <div class="eqs">2x - y = 6<br>x - 2y = 6</div>
-    <div class="ref">[অনুশীলনী ৬.১ — প্রশ্ন ৮]</div>
-    <div class="ref-en">ax - by = ab, bx - ay = ab</div>
   </div>
 
-  <div class="section-title" style="margin-top:10px;">
+  <div class="section-title" style="margin-top:12px;">
     <span>২. সৃজনশীল প্রশ্ন — প্রতিস্থাপন পদ্ধতি</span>
     <span class="en">10</span>
   </div>
-  <p class="section-note">অনুশীলনী ৬.১ — প্রশ্ন ৭ ও ৯ (ax + by = ab ধরন)</p>
 
   <div class="problem">
     <div class="problem-head"><span class="en">(ক)</span><span class="en">5</span></div>
-    <p class="prompt">Solve by the substitution method:</p>
     <div class="eqs">2x + y = 6<br>x + 2y = 6</div>
-    <div class="ref">[অনুশীলনী ৬.১ — প্রশ্ন ৭]</div>
-    <div class="ref-en">ax + by = ab, bx + ay = ab</div>
   </div>
   <div class="problem">
     <div class="problem-head"><span class="en">(খ)</span><span class="en">5</span></div>
-    <p class="prompt">Solve by the substitution method:</p>
     <div class="eqs">5x - 2y = 3<br>5x + 2y = 7</div>
-    <div class="ref">[অনুশীলনী ৬.১ — প্রশ্ন ৯]</div>
-    <div class="ref-en">ax - by = a - b, ax + by = a + b</div>
   </div>
 
   <p class="total">Total: 4 x 5 = 20</p>
