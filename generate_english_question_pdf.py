@@ -44,40 +44,43 @@ def build_pdf(path: str):
 
     # Page 2 — Seen Comprehension 11 + grammar
     pdf.add_page()
-    pdf.write_block("Seen Comprehension 11", 11.5, bold=True)
+    pdf.write_block("Seen Comprehension 11", 11, bold=True)
     pdf.write_block(
         "Read the text and answer the following questions. [Unit-6 : Lesson-7(B)]",
-        10.5,
+        10,
         bold=True,
     )
+    pdf.ln(0.2)
+    pdf.write_block(COMP_11_PASSAGE, 9.5, line_h=4.3)
     pdf.ln(0.3)
-    pdf.write_block(COMP_11_PASSAGE, 10)
-    pdf.ln(0.5)
-    pdf.write_block("● Seen Passage – 1 (First Seen) :", 10.5, bold=True)
-    pdf.write_block("1. Choose the best answer from the alternatives:", 10.5, bold=True)
+    pdf.write_block("● Seen Passage – 1 (First Seen) :", 10, bold=True)
+    pdf.write_block("1. Choose the best answer from the alternatives:", 10, bold=True)
     for line in COMP_11_MCQ:
-        pdf.write_block(line, 10)
-    pdf.ln(0.2)
-    pdf.write_block("2. Write short answers to the following questions:", 10.5, bold=True)
+        pdf.write_block(line, 9.5, line_h=4.2)
+    pdf.ln(0.1)
+    pdf.write_block("2. Write short answers to the following questions:", 10, bold=True)
     for line in COMP_11_SHORT:
-        pdf.write_block(line, 10)
-    pdf.ln(0.2)
-    pdf.write_block("● Seen Passage – 2 (Second Seen) :", 10.5, bold=True)
-    pdf.write_block("3. Complete the passage with suitable words:", 10.5, bold=True)
-    pdf.write_block(COMP_11_GAP, 10)
-    pdf.ln(0.2)
+        pdf.write_block(line, 9.5, line_h=4.2)
+    pdf.ln(0.1)
+    pdf.write_block("● Seen Passage – 2 (Second Seen) :", 10, bold=True)
+    pdf.write_block("3. Complete the passage with suitable words:", 10, bold=True)
+    pdf.write_block(COMP_11_GAP, 9.5, line_h=4.2)
+    pdf.ln(0.1)
     pdf.write_block(
         "4. Read the passage carefully and replace the following words with their suitable synonyms or antonyms:",
-        10.5,
+        10,
         bold=True,
+        line_h=4.3,
     )
-    pdf.write_block(COMP_11_SYNONYM, 10)
-    pdf.ln(0.5)
-    pdf.write_block("Practice Items : English Second Paper", 10.5, bold=True)
+    pdf.write_block(COMP_11_SYNONYM, 9.5, line_h=4.2)
     pdf.ln(0.3)
-    pdf.write_block(CHANGE_SENTENCE, 10)
-    pdf.ln(0.3)
-    pdf.write_block(VERB_FILL, 10)
+    pdf.write_block("Practice Items : English Second Paper", 10, bold=True)
+    pdf.ln(0.15)
+    pdf.write_block(CHANGE_SENTENCE_HEADER, 9.5, bold=True, line_h=4.2)
+    for line in CHANGE_SENTENCES:
+        pdf.write_block(line, 9.5, line_h=4.2)
+    pdf.ln(0.15)
+    pdf.write_block(VERB_FILL, 9.5, line_h=4.2)
 
     pdf.output(path)
 
@@ -182,10 +185,15 @@ COMP_11_SYNONYM = (
     "(a) landed (antonym); (b) wide (synonym); (c) long (antonym); (d) chosen (synonym); (e) raise (antonym)."
 )
 
-CHANGE_SENTENCE = (
-    "20. Change the following sentences as directed in the brackets.\n"
-    "(a) Bangladesh is a small country. (Make it a negative sentence without changing meaning)"
-)
+CHANGE_SENTENCE_HEADER = "20. Change the following sentences as directed in the brackets."
+
+CHANGE_SENTENCES = [
+    "(a) Bangladesh is a small country. (Make it a negative sentence without changing meaning)",
+    "(b) It is one of the most beautiful countries in the world. (Make it positive)",
+    "(c) The farmers work hard to support themselves. (Make it an interrogative sentence)",
+    "(d) They should be taken care of by us. (Make it active)",
+    "(e) It is the most populous country in the world. (Make it comparative)",
+]
 
 VERB_FILL = (
     "8. Fill in the blanks with the correct form of the verbs given in the brackets.\n"
@@ -202,8 +210,8 @@ class QuestionPaperPDF(FPDF):
 
     def __init__(self):
         super().__init__(format="A4", unit="mm")
-        self.set_auto_page_break(auto=True, margin=10)
-        self.set_margins(10, 8, 10)
+        self.set_auto_page_break(auto=False)
+        self.set_margins(14, 12, 14)
         self.add_font("DejaVu", "", self.FONT)
         self.add_font("DejaVu", "B", self.FONT_BOLD)
 
