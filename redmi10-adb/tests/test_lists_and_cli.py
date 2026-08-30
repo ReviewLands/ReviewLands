@@ -94,5 +94,22 @@ class HelperTests(unittest.TestCase):
         self.assertIn("biometric", detail.lower())
 
 
+class WindowsCmdTests(unittest.TestCase):
+    def test_cmd_embeds_biometric_and_debloat_lists(self) -> None:
+        cmd = (ROOT / "redmi10.cmd").read_text(encoding="utf-8", errors="replace")
+        for pkg in _pkgs("restore-biometrics.txt") | _pkgs("debloat-ads.txt") | _pkgs(
+            "debloat-apps.txt"
+        ):
+            self.assertIn(pkg, cmd, f"{pkg} missing from redmi10.cmd")
+
+    def test_cmd_has_no_python_dependency(self) -> None:
+        cmd = (ROOT / "redmi10.cmd").read_text(encoding="utf-8", errors="replace")
+        lowered = cmd.lower()
+        self.assertNotIn("python3", lowered)
+        self.assertNotIn("python.exe", lowered)
+        self.assertNotIn("py -3", lowered)
+        self.assertIn("adb.exe", cmd)
+
+
 if __name__ == "__main__":
     unittest.main()

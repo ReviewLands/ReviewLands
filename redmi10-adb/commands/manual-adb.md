@@ -1,38 +1,38 @@
 # Manual ADB commands
 
-Use these if you do not want to run the Python menu. USB debugging (including **Security settings**) must be on.
+Use these from your `platform-tools` folder in PowerShell. Prefix with `.\` so Windows uses `adb.exe` in that folder. USB debugging (including **Security settings**) must be on.
 
 ## 1. See what is disabled
 
-```bash
-adb devices
-adb shell getprop ro.product.model
-adb shell getprop ro.product.device
-adb shell getprop ro.miui.ui.version.name
-adb shell pm list packages -d
-adb shell pm path com.miui.face
-adb shell settings get secure face_unlock_keyguard_enabled
+```powershell
+.\adb devices
+.\adb shell getprop ro.product.model
+.\adb shell getprop ro.product.device
+.\adb shell getprop ro.miui.ui.version.name
+.\adb shell pm list packages -d
+.\adb shell pm path com.miui.face
+.\adb shell settings get secure face_unlock_keyguard_enabled
 ```
 
 ## 2. Restore Face Unlock and Fingerprint
 
-```bash
-adb shell pm unhide com.miui.face
-adb shell pm enable --user 0 com.miui.face
-adb shell cmd package install-existing com.miui.face
+```powershell
+.\adb shell pm unhide com.miui.face
+.\adb shell pm enable --user 0 com.miui.face
+.\adb shell cmd package install-existing com.miui.face
 
-adb shell pm enable --user 0 com.android.facelock
-adb shell cmd package install-existing com.android.facelock
+.\adb shell pm enable --user 0 com.android.facelock
+.\adb shell cmd package install-existing com.android.facelock
 
-adb shell pm enable --user 0 com.xiaomi.fido
-adb shell cmd package install-existing com.xiaomi.fido
+.\adb shell pm enable --user 0 com.xiaomi.fido
+.\adb shell cmd package install-existing com.xiaomi.fido
 
-adb shell pm enable --user 0 org.ifaa.aidl.manager
-adb shell cmd package install-existing org.ifaa.aidl.manager
+.\adb shell pm enable --user 0 org.ifaa.aidl.manager
+.\adb shell cmd package install-existing org.ifaa.aidl.manager
 
-adb shell settings put secure face_unlock_keyguard_enabled 1
-adb shell settings put global face_unlock_keyguard_enabled 1
-adb shell settings put secure face_unlock_disabled 0
+.\adb shell settings put secure face_unlock_keyguard_enabled 1
+.\adb shell settings put global face_unlock_keyguard_enabled 1
+.\adb shell settings put secure face_unlock_disabled 0
 ```
 
 Then on the phone: **Settings → Passwords & security → Face unlock** and **Fingerprint**. Reboot once if the menus are still missing.

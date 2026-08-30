@@ -31,17 +31,33 @@ On the PC, `adb devices` must show `device` (not `unauthorized` or empty).
 
 ## PC setup
 
-Install [Android platform-tools](https://developer.android.com/tools/releases/platform-tools) so `adb` is on your PATH. Python 3.9+ is required for the menu.
+Install [Android platform-tools](https://developer.android.com/tools/releases/platform-tools). You only need `adb`. **Python is not required on Windows.**
 
-### Windows
+### Windows (your setup)
 
-1. Unzip platform-tools (for example to `C:\platform-tools`).
-2. Add that folder to PATH, **or** copy `adb.exe` next to these scripts.
-3. Double-click `run.bat`, or in PowerShell:
+You already have platform-tools here:
+
+`F:\ADB\platform-tools-latest-windows\platform-tools`
+
+1. Copy `redmi10.cmd` into that folder (next to `adb.exe`).
+2. In PowerShell:
 
 ```powershell
-cd path\to\redmi10-adb
-py -3 redmi10.py
+cd F:\ADB\platform-tools-latest-windows\platform-tools
+.\adb devices
+.\redmi10.cmd diagnose
+.\redmi10.cmd restore
+.\redmi10.cmd recommended
+```
+
+Or double-click `redmi10.cmd` and use the menu.
+
+To download the script into platform-tools:
+
+```powershell
+cd F:\ADB\platform-tools-latest-windows\platform-tools
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/ReviewLands/ReviewLands/cursor/redmi10-adb-toolkit-dede/redmi10-adb/redmi10.cmd" -OutFile redmi10.cmd
+.\redmi10.cmd diagnose
 ```
 
 ### Linux / macOS
@@ -57,13 +73,21 @@ chmod +x run.sh
 
 ## Recommended order
 
-```bash
-python3 redmi10.py diagnose      # see what the last ADB session disabled
-python3 redmi10.py restore       # Face Unlock + Fingerprint back on
-python3 redmi10.py recommended   # restore + ads/unused-app freeze + enhancements
+Windows (no Python):
+
+```powershell
+.\redmi10.cmd diagnose
+.\redmi10.cmd restore
+.\redmi10.cmd recommended
 ```
 
-Or use the menu (`python3 redmi10.py`) and pick **[6]**.
+Linux / macOS, or Windows if you installed Python:
+
+```bash
+python3 redmi10.py diagnose
+python3 redmi10.py restore
+python3 redmi10.py recommended
+```
 
 After restore:
 
@@ -81,22 +105,16 @@ If you previously used `pm uninstall --user 0 com.miui.face`, the restore step r
 
 **Left installed on purpose:** Gallery, Camera, Security, Phone, Messages, Mi Account, Mi Cloud, Find Device. Those are easy to break on Redmi phones.
 
-Ads-only (keep unused Xiaomi apps):
-
-```bash
-python3 redmi10.py debloat --ads-only
-```
-
 Undo the last freeze from this toolkit:
 
-```bash
-python3 redmi10.py undo
+```powershell
+.\redmi10.cmd undo
 ```
 
 Re-enable **every** currently disabled package (useful if you do not remember what the old ADB session turned off):
 
-```bash
-python3 redmi10.py restore --all-disabled
+```powershell
+.\redmi10.cmd restore-all
 ```
 
 ## Manual ADB (no Python)
