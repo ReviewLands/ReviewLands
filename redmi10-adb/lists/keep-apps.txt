@@ -1,0 +1,4 @@
+# Apps to leave installed and protect from MIUI battery killing.
+# The Chess Lv.100 (plus Online) by UNBALANCE Corporation
+
+jp.co.unbalance.android.chessunbcc

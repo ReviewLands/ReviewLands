@@ -102,6 +102,12 @@ class WindowsCmdTests(unittest.TestCase):
         ):
             self.assertIn(pkg, cmd, f"{pkg} missing from redmi10.cmd")
 
+    def test_cmd_includes_chess_lv100(self) -> None:
+        cmd = (ROOT / "redmi10.cmd").read_text(encoding="utf-8", errors="replace")
+        self.assertIn("jp.co.unbalance.android.chessunbcc", cmd)
+        self.assertIn("do_chess", cmd)
+        self.assertIn("jp.co.unbalance.android.chessunbcc", _pkgs("keep-apps.txt"))
+
     def test_cmd_has_no_python_dependency(self) -> None:
         cmd = (ROOT / "redmi10.cmd").read_text(encoding="utf-8", errors="replace")
         lowered = cmd.lower()

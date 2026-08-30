@@ -357,6 +357,65 @@ def debloat(log: Logger, include_apps: bool) -> None:
     print("Use menu [5] to restore everything this session froze.")
 
 
+CHESS_PACKAGE = "jp.co.unbalance.android.chessunbcc"
+
+
+def chess_clean(log: Logger) -> None:
+    print_header("The Chess Lv.100 — Xiaomi ads off, game protected")
+    print("Does not modify the Chess APK or strip the game's own ads.")
+    print("Official in-game ads stay unless you buy Premium in the app.")
+    print()
+
+    if package_installed(CHESS_PACKAGE):
+        print(f"Found The Chess Lv.100 ({CHESS_PACKAGE})")
+    else:
+        print(f"Not installed as {CHESS_PACKAGE}")
+        matches = [p for p in list_packages() if "chess" in p.lower() or "unbalance" in p.lower()]
+        if matches:
+            print("Packages matching chess / unbalance:")
+            for pkg in matches:
+                print(f"  - {pkg}")
+        else:
+            print("No chess package found. Install The Chess Lv.100 from Play Store.")
+        return
+
+    print("\nFreezing Xiaomi ads / analytics / Game Center junk...")
+    for pkg in load_list("debloat-ads.txt"):
+        status, detail = disable_package(pkg)
+        log.write(f"chess-debloat {pkg} -> {status} {detail}")
+        label = "ok" if status in {"disabled", "uninstalled-user"} else status
+        print(f"  [{label:7}] {pkg}")
+
+    extra = (
+        "com.xiaomi.mipicks",
+        "com.facebook.appmanager",
+        "com.facebook.services",
+        "com.facebook.system",
+    )
+    for pkg in extra:
+        status, detail = disable_package(pkg)
+        log.write(f"chess-debloat {pkg} -> {status} {detail}")
+        label = "ok" if status in {"disabled", "uninstalled-user"} else status
+        print(f"  [{label:7}] {pkg}")
+
+    print("\nProtecting the chess app from MIUI background killing...")
+    for command in (
+        f"dumpsys deviceidle whitelist +{CHESS_PACKAGE}",
+        f"cmd appops set {CHESS_PACKAGE} RUN_IN_BACKGROUND allow",
+        f"cmd appops set {CHESS_PACKAGE} RUN_ANY_IN_BACKGROUND allow",
+    ):
+        result = shell(command)
+        out = ((result.stdout or "") + (result.stderr or "")).strip()
+        print(f"  {command}")
+        if out:
+            print(f"    {out}")
+        log.write(f"{command} -> {out or 'ok'}")
+
+    print()
+    print("Open The Chess Lv.100 and play. Xiaomi overlay ads should be gone.")
+    print("The game's own banners still need Premium in the app to remove.")
+
+
 def enhance(log: Logger) -> None:
     print_header("Enhancements (safe, reversible)")
     tweaks = [
@@ -463,6 +522,7 @@ def menu_loop(log: Logger) -> None:
         print("  [5] Undo the last debloat from this toolkit")
         print("  [6] Recommended: restore biometrics + ads debloat + enhance")
         print("  [7] Restore ALL currently disabled packages")
+        print("  [8] The Chess Lv.100 — freeze Xiaomi ads, protect the game")
         print("  [0] Quit")
         print()
         choice = input("Choose: ").strip() if sys.stdin.isatty() else "0"
@@ -497,6 +557,10 @@ def menu_loop(log: Logger) -> None:
             print("This re-enables every disabled package, not only biometrics.")
             if confirm("Restore ALL disabled packages?"):
                 restore_biometrics(log, restore_all_disabled=True)
+        elif choice == "8":
+            require_device()
+            if confirm("Freeze Xiaomi ads and protect The Chess Lv.100?"):
+                chess_clean(log)
         elif choice == "0":
             print("Done. Unplug the phone when you are finished.")
             return
@@ -511,7 +575,16 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument(
         "action",
         nargs="?",
-        choices=["menu", "diagnose", "restore", "debloat", "enhance", "undo", "recommended"],
+        choices=[
+            "menu",
+            "diagnose",
+            "restore",
+            "debloat",
+            "enhance",
+            "undo",
+            "recommended",
+            "chess",
+        ],
         default="menu",
         help="Command to run (default: interactive menu)",
     )
@@ -556,6 +629,8 @@ def main(argv: list[str] | None = None) -> int:
             restore_biometrics(log, restore_all_disabled=False)
             debloat(log, include_apps=True)
             enhance(log)
+        elif args.action == "chess":
+            chess_clean(log)
         return 0
     except AdbError as exc:
         print(f"\nError: {exc}", file=sys.stderr)

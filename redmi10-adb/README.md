@@ -117,6 +117,16 @@ Re-enable **every** currently disabled package (useful if you do not remember wh
 .\redmi10.cmd restore-all
 ```
 
+## The Chess Lv.100
+
+Makes that game run cleaner by freezing Xiaomi ads/analytics and stopping MIUI from killing the app. Does **not** modify the Chess APK or remove the game's own banners (those need Premium in the app).
+
+```powershell
+.\redmi10.cmd chess
+```
+
+See [commands/chess-lv100.md](commands/chess-lv100.md). Fingerprint is left alone.
+
 ## Manual ADB (no Python)
 
 See [commands/manual-adb.md](commands/manual-adb.md).
