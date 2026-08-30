@@ -3,6 +3,7 @@
 
 com.miui.msa.global
 com.miui.systemAdSolution
+com.xiaomi.adserver
 com.miui.analytics
 com.xiaomi.joyose
 com.miui.daemon

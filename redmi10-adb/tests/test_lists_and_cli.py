@@ -106,6 +106,9 @@ class WindowsCmdTests(unittest.TestCase):
         cmd = (ROOT / "redmi10.cmd").read_text(encoding="utf-8", errors="replace")
         self.assertIn("jp.co.unbalance.android.chessunbcc", cmd)
         self.assertIn("do_chess", cmd)
+        self.assertIn("do_ads_off", cmd)
+        self.assertIn("dns.adguard-dns.com", cmd)
+        self.assertIn("com.xiaomi.adserver", cmd)
         self.assertIn("jp.co.unbalance.android.chessunbcc", _pkgs("keep-apps.txt"))
 
     def test_cmd_has_no_python_dependency(self) -> None:

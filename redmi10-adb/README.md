@@ -127,6 +127,16 @@ Makes that game run cleaner by freezing Xiaomi ads/analytics and stopping MIUI f
 
 See [commands/chess-lv100.md](commands/chess-lv100.md). Fingerprint is left alone.
 
+## No ads
+
+```powershell
+.\redmi10.cmd ads-off
+```
+
+Freezes Xiaomi ad services and sets **Private DNS** to AdGuard (`dns.adguard-dns.com`) so most in-app ad servers are blocked. Does not patch any APK. Undo: Settings → Connection & sharing → Private DNS → Automatic.
+
+See [commands/no-ads.md](commands/no-ads.md).
+
 ## Manual ADB (no Python)
 
 See [commands/manual-adb.md](commands/manual-adb.md).

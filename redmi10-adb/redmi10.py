@@ -362,8 +362,7 @@ CHESS_PACKAGE = "jp.co.unbalance.android.chessunbcc"
 
 def chess_clean(log: Logger) -> None:
     print_header("The Chess Lv.100 — Xiaomi ads off, game protected")
-    print("Does not modify the Chess APK or strip the game's own ads.")
-    print("Official in-game ads stay unless you buy Premium in the app.")
+    print("Blocks Xiaomi ads and ad servers. Does not patch the Chess APK.")
     print()
 
     if package_installed(CHESS_PACKAGE):
@@ -379,24 +378,7 @@ def chess_clean(log: Logger) -> None:
             print("No chess package found. Install The Chess Lv.100 from Play Store.")
         return
 
-    print("\nFreezing Xiaomi ads / analytics / Game Center junk...")
-    for pkg in load_list("debloat-ads.txt"):
-        status, detail = disable_package(pkg)
-        log.write(f"chess-debloat {pkg} -> {status} {detail}")
-        label = "ok" if status in {"disabled", "uninstalled-user"} else status
-        print(f"  [{label:7}] {pkg}")
-
-    extra = (
-        "com.xiaomi.mipicks",
-        "com.facebook.appmanager",
-        "com.facebook.services",
-        "com.facebook.system",
-    )
-    for pkg in extra:
-        status, detail = disable_package(pkg)
-        log.write(f"chess-debloat {pkg} -> {status} {detail}")
-        label = "ok" if status in {"disabled", "uninstalled-user"} else status
-        print(f"  [{label:7}] {pkg}")
+    ads_off(log)
 
     print("\nProtecting the chess app from MIUI background killing...")
     for command in (
@@ -412,8 +394,39 @@ def chess_clean(log: Logger) -> None:
         log.write(f"{command} -> {out or 'ok'}")
 
     print()
-    print("Open The Chess Lv.100 and play. Xiaomi overlay ads should be gone.")
-    print("The game's own banners still need Premium in the app to remove.")
+    print("Force-close The Chess Lv.100 if it is open, then play again.")
+
+
+def ads_off(log: Logger) -> None:
+    print_header("No ads — Xiaomi services + Private DNS")
+    print("Does not patch any APK. Blocks Xiaomi ad apps and ad servers.")
+    extra = (
+        "com.xiaomi.mipicks",
+        "com.miui.hybrid",
+        "com.miui.hybrid.accessory",
+        "com.facebook.appmanager",
+        "com.facebook.services",
+        "com.facebook.system",
+    )
+    for pkg in load_list("debloat-ads.txt") + list(extra):
+        status, detail = disable_package(pkg)
+        log.write(f"ads-off {pkg} -> {status} {detail}")
+        label = "ok" if status in {"disabled", "uninstalled-user"} else status
+        print(f"  [{label:7}] {pkg}")
+
+    print("\nXiaomi ad settings + AdGuard Private DNS...")
+    for ns, key, value in (
+        ("global", "personalized_ad_enabled", "0"),
+        ("system", "passport_ad_status", "OFF"),
+        ("global", "private_dns_mode", "hostname"),
+        ("global", "private_dns_specifier", "dns.adguard-dns.com"),
+    ):
+        ok, detail = settings_put(ns, key, value)
+        print(f"  [{'ok' if ok else 'warn'}] {ns}/{key}={value}" + ("" if ok else f" ({detail})"))
+        log.write(f"ads-off {ns}/{key}={value} -> {detail}")
+
+    print()
+    print("If a site or app breaks: Settings → Connection & sharing → Private DNS → Automatic.")
 
 
 def enhance(log: Logger) -> None:
@@ -523,6 +536,7 @@ def menu_loop(log: Logger) -> None:
         print("  [6] Recommended: restore biometrics + ads debloat + enhance")
         print("  [7] Restore ALL currently disabled packages")
         print("  [8] The Chess Lv.100 — freeze Xiaomi ads, protect the game")
+        print("  [9] No ads — Xiaomi ads off + Private DNS ad block")
         print("  [0] Quit")
         print()
         choice = input("Choose: ").strip() if sys.stdin.isatty() else "0"
@@ -561,6 +575,10 @@ def menu_loop(log: Logger) -> None:
             require_device()
             if confirm("Freeze Xiaomi ads and protect The Chess Lv.100?"):
                 chess_clean(log)
+        elif choice == "9":
+            require_device()
+            if confirm("Turn off Xiaomi ads and enable Private DNS ad blocking?"):
+                ads_off(log)
         elif choice == "0":
             print("Done. Unplug the phone when you are finished.")
             return
@@ -584,6 +602,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
             "undo",
             "recommended",
             "chess",
+            "ads-off",
         ],
         default="menu",
         help="Command to run (default: interactive menu)",
@@ -631,6 +650,8 @@ def main(argv: list[str] | None = None) -> int:
             enhance(log)
         elif args.action == "chess":
             chess_clean(log)
+        elif args.action == "ads-off":
+            ads_off(log)
         return 0
     except AdbError as exc:
         print(f"\nError: {exc}", file=sys.stderr)

@@ -32,10 +32,11 @@ if /i "%ACTION%"=="undo" goto :do_undo
 if /i "%ACTION%"=="recommended" goto :do_recommended
 if /i "%ACTION%"=="restore-all" goto :do_restore_all
 if /i "%ACTION%"=="chess" goto :do_chess
+if /i "%ACTION%"=="ads-off" goto :do_ads_off
 if /i "%ACTION%"=="menu" goto :menu
 if not "%ACTION%"=="" (
   echo Unknown action: %ACTION%
-  echo Use: diagnose  restore  restore-all  debloat  enhance  undo  recommended  chess
+  echo Use: diagnose  restore  restore-all  debloat  enhance  undo  recommended  chess  ads-off
   exit /b 1
 )
 
@@ -54,6 +55,7 @@ echo   [5] Undo last debloat from this script
 echo   [6] Recommended: restore + debloat + enhance
 echo   [7] Restore ALL currently disabled packages
 echo   [8] The Chess Lv.100  - freeze Xiaomi ads, protect the game
+echo   [9] No ads  - Xiaomi ads off + Private DNS ad block
 echo   [0] Quit
 echo.
 set /p "CHOICE=Choose: "
@@ -65,6 +67,7 @@ if "%CHOICE%"=="5" goto :do_undo
 if "%CHOICE%"=="6" goto :do_recommended
 if "%CHOICE%"=="7" goto :do_restore_all
 if "%CHOICE%"=="8" goto :do_chess
+if "%CHOICE%"=="9" goto :do_ads_off
 if "%CHOICE%"=="0" exit /b 0
 echo Unknown choice.
 goto :menu
@@ -151,6 +154,12 @@ if errorlevel 1 goto :fail
 call :chess_work
 goto :finish
 
+:do_ads_off
+call :need_device
+if errorlevel 1 goto :fail
+call :ads_off_work
+goto :finish
+
 :restore_work
 echo.
 echo ================================================================
@@ -199,6 +208,7 @@ echo ================================================================
 for %%P in (
   com.miui.msa.global
   com.miui.systemAdSolution
+  com.xiaomi.adserver
   com.miui.analytics
   com.xiaomi.joyose
   com.miui.daemon
@@ -281,29 +291,18 @@ echo ================================================================
 echo Done. Animations are 0.5x. Background Wi-Fi/Bluetooth scans are off.
 goto :eof
 
-:chess_work
-set "CHESS=jp.co.unbalance.android.chessunbcc"
+:ads_off_work
 echo.
 echo ================================================================
-echo  The Chess Lv.100  - Xiaomi ads off, game protected
+echo  No ads  - Xiaomi services + Private DNS
 echo ================================================================
-echo This does NOT modify the Chess APK or remove the game's own ads.
-echo Official in-game ads stay unless you buy Premium in the app.
+echo Does not patch any APK. Blocks Xiaomi ad apps and ad servers.
+echo Undo DNS later: Settings - Connection - Private DNS - Automatic
 echo.
-"%ADB%" shell pm path %CHESS% 2>nul | findstr /i "package:" >nul
-if errorlevel 1 (
-  echo Chess Lv.100 is not installed as %CHESS%
-  echo Installed packages matching chess:
-  "%ADB%" shell pm list packages | findstr /i "chess unbalance"
-  echo Install it from Play Store, then run this again.
-  goto :eof
-)
-echo Found The Chess Lv.100
-echo.
-echo Freezing Xiaomi ads / analytics / Game Center junk...
 for %%P in (
   com.miui.msa.global
   com.miui.systemAdSolution
+  com.xiaomi.adserver
   com.miui.analytics
   com.xiaomi.joyose
   com.miui.daemon
@@ -315,18 +314,48 @@ for %%P in (
   com.xiaomi.gamecenter.sdk.service
   com.xiaomi.migameservice
   com.xiaomi.mipicks
+  com.miui.hybrid
+  com.miui.hybrid.accessory
   com.facebook.appmanager
   com.facebook.services
   com.facebook.system
 ) do call :disable_pkg %%P
+echo.
+echo Turning off Xiaomi personalized ads...
+"%ADB%" shell settings put global personalized_ad_enabled 0
+"%ADB%" shell settings put system passport_ad_status OFF
+echo.
+echo Private DNS ad block ^(AdGuard^)...
+"%ADB%" shell settings put global private_dns_mode hostname
+"%ADB%" shell settings put global private_dns_specifier dns.adguard-dns.com
+echo.
+echo Ads from Xiaomi and most in-app ad networks should be gone.
+echo If a site or app breaks, set Private DNS back to Automatic.
+goto :eof
+
+:chess_work
+set "CHESS=jp.co.unbalance.android.chessunbcc"
+echo.
+echo ================================================================
+echo  The Chess Lv.100  - no ads
+echo ================================================================
+"%ADB%" shell pm path %CHESS% 2>nul | findstr /i "package:" >nul
+if errorlevel 1 (
+  echo Chess Lv.100 is not installed as %CHESS%
+  echo Installed packages matching chess:
+  "%ADB%" shell pm list packages | findstr /i "chess unbalance"
+  echo Install it from Play Store, then run this again.
+  goto :eof
+)
+echo Found The Chess Lv.100
+call :ads_off_work
 echo.
 echo Protecting the chess app from MIUI background killing...
 "%ADB%" shell dumpsys deviceidle whitelist +%CHESS%
 "%ADB%" shell cmd appops set %CHESS% RUN_IN_BACKGROUND allow
 "%ADB%" shell cmd appops set %CHESS% RUN_ANY_IN_BACKGROUND allow
 echo.
-echo Open The Chess Lv.100 and play. Xiaomi overlay ads should be gone.
-echo The game's own banners still need Premium in the app to remove.
+echo Open The Chess Lv.100. Force-close it first if it was already open.
 goto :eof
 
 :need_device

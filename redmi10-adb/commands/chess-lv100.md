@@ -3,7 +3,7 @@
 App: **The Chess Lv.100 (plus Online)**  
 Package: `jp.co.unbalance.android.chessunbcc`
 
-This turns off **Xiaomi** ads and background junk so the game has more RAM. It does **not** patch the Chess APK. The game's own banners are part of the official free app; the official way to remove those is Premium inside the game.
+Turns off Xiaomi ads and sets Private DNS (AdGuard) so most in-game ad servers are blocked. It does **not** patch the Chess APK.
 
 Fingerprint is not changed.
 
