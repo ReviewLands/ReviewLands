@@ -98,7 +98,7 @@ def mcq_header() -> str:
   <div class="school">{esc(SCHOOL)}</div>
   <div class="subject">গণিত</div>
   <div class="exam-title">বহুনির্বাচনি অভীক্ষা</div>
-  <div class="meta"><span>সময়— ৩০ মিনিট</span><span>বিষয় কোড: ১&nbsp;&nbsp;০&nbsp;&nbsp;৯</span><span>পূর্ণমান— ৩০</span></div>
+  <div class="meta"><span>সময়— ৩০ মিনিট</span><span>বিষয় কোড: ১&nbsp;&nbsp;০&nbsp;&nbsp;৮</span><span>পূর্ণমান— ৩০</span></div>
   <div class="note">(নির্দেশনা: প্রশ্নপত্রে দেওয়া চারটি বিকল্পের মধ্যে সঠিক উত্তরের বৃত্ত ভরে কালো কালি দিয়ে পূর্ণ করতে হবে।)</div>
 </div>"""
 
@@ -108,7 +108,7 @@ def creative_header() -> str:
 <div class="header">
   <div class="school">{esc(SCHOOL)}</div>
   <div class="subject">গণিত (সৃজনশীল)</div>
-  <div class="meta"><span>সময়—২ ঘণ্টা ৩০ মিনিট</span><span>বিষয় কোড: ১&nbsp;&nbsp;০&nbsp;&nbsp;৯</span><span>পূর্ণমান— ৭০</span></div>
+  <div class="meta"><span>সময়—২ ঘণ্টা ৩০ মিনিট</span><span>বিষয় কোড: ১&nbsp;&nbsp;০&nbsp;&nbsp;৮</span><span>পূর্ণমান— ৭০</span></div>
   <div class="note">(দ্রষ্টব্য: সৃজনশীল প্রশ্ন অংশের প্রত্যেক বিভাগ থেকে কমপক্ষে ১টি করে প্রশ্নের মোট ৪টি এবং সংক্ষিপ্ত-উত্তর প্রশ্ন থেকে যেকোনো ১০টি প্রশ্নের উত্তর দাও।)</div>
 </div>"""
 
