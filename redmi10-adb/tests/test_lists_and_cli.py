@@ -43,10 +43,22 @@ class ListSafetyTests(unittest.TestCase):
         self.assertIn("com.xiaomi.finddevice", _pkgs("never-touch.txt"))
         self.assertIn("com.miui.securitycenter", _pkgs("never-touch.txt"))
 
+    def test_call_packages_not_debloated(self) -> None:
+        frozen = _pkgs("debloat-ads.txt") | _pkgs("debloat-apps.txt")
+        for pkg in (
+            "com.xiaomi.simactivate.service",
+            "com.xiaomi.mircs",
+            "com.miui.yellowpage",
+            "com.xiaomi.mi_connect_service",
+        ):
+            self.assertNotIn(pkg, frozen)
+            self.assertIn(pkg, _pkgs("restore-calls.txt"))
+
     def test_no_duplicate_packages_inside_a_list(self) -> None:
         for name in (
             "never-touch.txt",
             "restore-biometrics.txt",
+            "restore-calls.txt",
             "debloat-ads.txt",
             "debloat-apps.txt",
         ):
@@ -57,6 +69,7 @@ class ListSafetyTests(unittest.TestCase):
         for name in (
             "never-touch.txt",
             "restore-biometrics.txt",
+            "restore-calls.txt",
             "debloat-ads.txt",
             "debloat-apps.txt",
         ):
@@ -107,6 +120,7 @@ class WindowsCmdTests(unittest.TestCase):
         self.assertIn("jp.co.unbalance.android.chessunbcc", cmd)
         self.assertIn("do_chess", cmd)
         self.assertIn("do_ads_off", cmd)
+        self.assertIn("do_fix_call", cmd)
         self.assertIn("dns.adguard-dns.com", cmd)
         self.assertIn("com.xiaomi.adserver", cmd)
         self.assertIn("jp.co.unbalance.android.chessunbcc", _pkgs("keep-apps.txt"))

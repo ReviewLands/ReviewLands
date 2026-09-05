@@ -137,6 +137,16 @@ Freezes Xiaomi ad services and sets **Private DNS** to AdGuard (`dns.adguard-dns
 
 See [commands/no-ads.md](commands/no-ads.md).
 
+## Fake "Install secure call from null" during calls
+
+A ghost second-call banner from a frozen SIM/RCS/caller-ID package. Restore those packages (keeps ads off):
+
+```powershell
+.\redmi10.cmd fix-call
+```
+
+Then reboot. See [commands/fix-call.md](commands/fix-call.md).
+
 ## Manual ADB (no Python)
 
 See [commands/manual-adb.md](commands/manual-adb.md).

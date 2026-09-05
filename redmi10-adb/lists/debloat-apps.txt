@@ -8,7 +8,6 @@ com.miui.player
 com.miui.videoplayer
 com.miui.video
 com.xiaomi.midrop
-com.miui.yellowpage
 com.xiaomi.mipicks
 com.xiaomi.payment
 com.mipay.wallet.in
@@ -41,6 +40,4 @@ com.xiaomi.mirecycle
 com.xiaomi.calendar
 com.miui.weather2
 com.xiaomi.vipaccount
-com.xiaomi.mircs
 com.xiaomi.mirror
-com.xiaomi.simactivate.service

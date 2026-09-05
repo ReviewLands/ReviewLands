@@ -23,5 +23,4 @@ com.xiaomi.aiasst.service
 com.miui.contentcatcher
 com.miui.audiomonitor
 com.miui.voicetrigger
-com.xiaomi.mi_connect_service
 com.xiaomi.powerchecker

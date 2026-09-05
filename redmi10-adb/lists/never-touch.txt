@@ -40,3 +40,15 @@ com.google.android.gms
 com.google.android.gsf
 com.android.inputmethod.latin
 com.google.android.inputmethod.latin
+com.google.android.dialer
+com.android.incallui
+com.android.contacts
+com.google.android.contacts
+com.google.android.ims
+com.android.mms
+com.android.messaging
+com.google.android.apps.messaging
+com.xiaomi.simactivate.service
+com.xiaomi.mircs
+com.miui.yellowpage
+com.android.carrierdefaultapp

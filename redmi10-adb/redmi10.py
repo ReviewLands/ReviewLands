@@ -160,7 +160,7 @@ def enable_package(package: str) -> tuple[str, str]:
 
 
 def disable_package(package: str) -> tuple[str, str]:
-    if package in load_never():
+    if package in load_never() or package in load_list("restore-calls.txt"):
         return "blocked", "protected package"
     if BIOMETRIC_RE.search(package):
         return "blocked", "biometric-related — skipped to keep Face / Fingerprint working"
@@ -429,6 +429,25 @@ def ads_off(log: Logger) -> None:
     print("If a site or app breaks: Settings → Connection & sharing → Private DNS → Automatic.")
 
 
+def fix_calls(log: Logger) -> None:
+    print_header('Fix fake "Install secure call from null" during calls')
+    print("Re-enables SIM / RCS / caller-ID / dialer packages that can leave")
+    print("a ghost incoming-call banner after a debloat.")
+    print()
+    for pkg in load_list("restore-calls.txt"):
+        status, detail = enable_package(pkg)
+        log.write(f"fix-call {pkg} -> {status} {detail}")
+        if status in {"restored", "enabled"}:
+            print(f"  [ok]   {pkg}")
+        elif status == "missing":
+            print(f"  [skip] {pkg}")
+        else:
+            print(f"  [fail] {pkg}: {detail}")
+    print()
+    print("Reboot once, then make a test call.")
+    print("If the popup remains: Settings → Connection & sharing → Private DNS → Automatic")
+
+
 def enhance(log: Logger) -> None:
     print_header("Enhancements (safe, reversible)")
     tweaks = [
@@ -537,6 +556,7 @@ def menu_loop(log: Logger) -> None:
         print("  [7] Restore ALL currently disabled packages")
         print("  [8] The Chess Lv.100 — freeze Xiaomi ads, protect the game")
         print("  [9] No ads — Xiaomi ads off + Private DNS ad block")
+        print("  [C] Fix fake Secure Call popup during phone calls")
         print("  [0] Quit")
         print()
         choice = input("Choose: ").strip() if sys.stdin.isatty() else "0"
@@ -579,6 +599,10 @@ def menu_loop(log: Logger) -> None:
             require_device()
             if confirm("Turn off Xiaomi ads and enable Private DNS ad blocking?"):
                 ads_off(log)
+        elif choice.lower() == "c":
+            require_device()
+            if confirm("Restore call/SIM/RCS packages to fix the Secure Call popup?"):
+                fix_calls(log)
         elif choice == "0":
             print("Done. Unplug the phone when you are finished.")
             return
@@ -603,6 +627,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
             "recommended",
             "chess",
             "ads-off",
+            "fix-call",
         ],
         default="menu",
         help="Command to run (default: interactive menu)",
@@ -652,6 +677,8 @@ def main(argv: list[str] | None = None) -> int:
             chess_clean(log)
         elif args.action == "ads-off":
             ads_off(log)
+        elif args.action == "fix-call":
+            fix_calls(log)
         return 0
     except AdbError as exc:
         print(f"\nError: {exc}", file=sys.stderr)

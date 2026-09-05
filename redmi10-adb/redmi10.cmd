@@ -33,10 +33,11 @@ if /i "%ACTION%"=="recommended" goto :do_recommended
 if /i "%ACTION%"=="restore-all" goto :do_restore_all
 if /i "%ACTION%"=="chess" goto :do_chess
 if /i "%ACTION%"=="ads-off" goto :do_ads_off
+if /i "%ACTION%"=="fix-call" goto :do_fix_call
 if /i "%ACTION%"=="menu" goto :menu
 if not "%ACTION%"=="" (
   echo Unknown action: %ACTION%
-  echo Use: diagnose  restore  restore-all  debloat  enhance  undo  recommended  chess  ads-off
+  echo Use: diagnose  restore  restore-all  debloat  enhance  undo  recommended  chess  ads-off  fix-call
   exit /b 1
 )
 
@@ -56,6 +57,7 @@ echo   [6] Recommended: restore + debloat + enhance
 echo   [7] Restore ALL currently disabled packages
 echo   [8] The Chess Lv.100  - freeze Xiaomi ads, protect the game
 echo   [9] No ads  - Xiaomi ads off + Private DNS ad block
+echo   [C] Fix fake "secure call" popup during phone calls
 echo   [0] Quit
 echo.
 set /p "CHOICE=Choose: "
@@ -68,6 +70,7 @@ if "%CHOICE%"=="6" goto :do_recommended
 if "%CHOICE%"=="7" goto :do_restore_all
 if "%CHOICE%"=="8" goto :do_chess
 if "%CHOICE%"=="9" goto :do_ads_off
+if /i "%CHOICE%"=="C" goto :do_fix_call
 if "%CHOICE%"=="0" exit /b 0
 echo Unknown choice.
 goto :menu
@@ -160,6 +163,12 @@ if errorlevel 1 goto :fail
 call :ads_off_work
 goto :finish
 
+:do_fix_call
+call :need_device
+if errorlevel 1 goto :fail
+call :fix_call_work
+goto :finish
+
 :restore_work
 echo.
 echo ================================================================
@@ -228,7 +237,6 @@ for %%P in (
   com.miui.contentcatcher
   com.miui.audiomonitor
   com.miui.voicetrigger
-  com.xiaomi.mi_connect_service
   com.xiaomi.powerchecker
   com.mi.globalbrowser
   com.android.browser
@@ -236,7 +244,6 @@ for %%P in (
   com.miui.videoplayer
   com.miui.video
   com.xiaomi.midrop
-  com.miui.yellowpage
   com.xiaomi.mipicks
   com.xiaomi.payment
   com.mipay.wallet.in
@@ -269,9 +276,7 @@ for %%P in (
   com.xiaomi.calendar
   com.miui.weather2
   com.xiaomi.vipaccount
-  com.xiaomi.mircs
   com.xiaomi.mirror
-  com.xiaomi.simactivate.service
 ) do call :disable_pkg %%P
 echo.
 echo Undo with:  redmi10.cmd undo
@@ -358,6 +363,40 @@ echo.
 echo Open The Chess Lv.100. Force-close it first if it was already open.
 goto :eof
 
+:fix_call_work
+echo.
+echo ================================================================
+echo  Fix fake "Install secure call from null" during calls
+echo ================================================================
+echo That banner is a ghost second call from a disabled SIM/RCS/caller-ID
+echo package. Re-enabling those packages now.
+echo.
+for %%P in (
+  com.xiaomi.simactivate.service
+  com.xiaomi.mircs
+  com.miui.yellowpage
+  com.xiaomi.mi_connect_service
+  com.android.carrierdefaultapp
+  com.google.android.ims
+  com.android.ims
+  com.google.android.dialer
+  com.android.phone
+  com.android.incallui
+  com.android.server.telecom
+  com.android.contacts
+  com.google.android.contacts
+  com.android.mms
+  com.android.messaging
+  com.google.android.apps.messaging
+  com.android.stk
+  com.android.stk2
+) do call :enable_pkg %%P
+echo.
+echo Reboot the phone once, then make a test call.
+echo If the popup is still there, set Private DNS to Automatic and try again:
+echo   Settings - Connection ^& sharing - Private DNS - Automatic
+goto :eof
+
 :need_device
 "%ADB%" start-server >nul 2>&1
 echo.
@@ -402,7 +441,7 @@ if not errorlevel 1 (
   echo   [keep] %PKG% ^(biometric^)
   goto :eof
 )
-echo %PKG% | findstr /x /i "com.xiaomi.finddevice com.miui.securitycenter com.miui.securityadd com.miui.securitycore com.xiaomi.xmsf com.xiaomi.account" >nul
+echo %PKG% | findstr /x /i "com.xiaomi.finddevice com.miui.securitycenter com.miui.securityadd com.miui.securitycore com.xiaomi.xmsf com.xiaomi.account com.xiaomi.simactivate.service com.xiaomi.mircs com.miui.yellowpage com.xiaomi.mi_connect_service com.google.android.dialer com.android.phone com.android.incallui com.google.android.ims" >nul
 if not errorlevel 1 (
   echo   [keep] %PKG% ^(protected^)
   goto :eof
