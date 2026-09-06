@@ -1,0 +1,22 @@
+# Face unlock, fingerprint, and related auth services on Redmi 10 2022
+# (selene / 22011119TI / 22011119UY) and other MIUI / HyperOS devices.
+# The restore step enables these if they exist, and also reinstalls them
+# for the current user if they were removed with: pm uninstall --user 0
+
+com.miui.face
+com.android.facelock
+com.xiaomi.fido
+com.xiaomi.fidoauth
+com.miui.biometricauth
+com.fingerprints.service
+com.fingerprints.serviceext
+com.fingerprints.extension.service
+com.goodix.fingerprint
+com.goodix.fingerprint.setting
+com.goodix.gftest
+org.ifaa.aidl.manager
+vendor.xiaomi.hardware.fingerprintextension
+com.android.server.biometrics
+com.mlab.faceunlock
+com.xiaomi.biometric
+com.fingerprints.sensortest

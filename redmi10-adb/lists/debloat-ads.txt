@@ -1,0 +1,26 @@
+# Ads, analytics, and recommendation daemons. Safe to freeze.
+# Reversible with: pm enable --user 0 <package>
+
+com.miui.msa.global
+com.miui.systemAdSolution
+com.xiaomi.adserver
+com.miui.analytics
+com.xiaomi.joyose
+com.miui.daemon
+com.xiaomi.discover
+com.miui.bugreport
+com.miui.miservice
+com.xiaomi.ab
+com.miui.android.fashiongallery
+com.mfashiongallery.emag
+com.xiaomi.glgm
+com.miui.translation.kingsoft
+com.miui.translation.youdao
+com.miui.translationservice
+com.xiaomi.gamecenter.sdk.service
+com.xiaomi.migameservice
+com.xiaomi.aiasst.service
+com.miui.contentcatcher
+com.miui.audiomonitor
+com.miui.voicetrigger
+com.xiaomi.powerchecker

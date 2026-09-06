@@ -1,0 +1,43 @@
+# Preinstalled apps most people never use. Frozen only if present.
+# Does NOT include Gallery, Camera, Security, Phone, Messages, or Mi Account.
+# Does NOT include Mi Cloud (kept so Find Device / backups still work).
+
+com.mi.globalbrowser
+com.android.browser
+com.miui.player
+com.miui.videoplayer
+com.miui.video
+com.xiaomi.midrop
+com.xiaomi.mipicks
+com.xiaomi.payment
+com.mipay.wallet.in
+com.mipay.wallet.id
+com.duokan.phone.remotecontroller
+com.duokan.phone.remotecontroller.peel.plugin
+com.miui.hybrid
+com.miui.hybrid.accessory
+com.miui.compass
+com.xiaomi.scanner
+com.miui.fm
+com.miui.fmservice
+com.mi.global.bbs
+com.mi.global.shop
+com.xiaomi.smarthome
+com.miui.enbbs
+com.miui.phrase
+com.facebook.appmanager
+com.facebook.services
+com.facebook.system
+com.facebook.katana
+com.linkedin.android
+com.netflix.partner.activation
+com.netflix.mediaclient
+com.amazon.appmanager
+com.amazon.mShop.android.shopping
+cn.wps.xiaomi.abroad.lite
+com.miui.touchassistant
+com.xiaomi.mirecycle
+com.xiaomi.calendar
+com.miui.weather2
+com.xiaomi.vipaccount
+com.xiaomi.mirror

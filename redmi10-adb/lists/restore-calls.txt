@@ -1,0 +1,21 @@
+# Call / SIM / RCS / caller-ID packages. Disabling these can show a fake
+# incoming call banner: "Install secure call from null".
+
+com.xiaomi.simactivate.service
+com.xiaomi.mircs
+com.miui.yellowpage
+com.xiaomi.mi_connect_service
+com.android.carrierdefaultapp
+com.google.android.ims
+com.android.ims
+com.google.android.dialer
+com.android.phone
+com.android.incallui
+com.android.server.telecom
+com.android.contacts
+com.google.android.contacts
+com.android.mms
+com.android.messaging
+com.google.android.apps.messaging
+com.android.stk
+com.android.stk2
