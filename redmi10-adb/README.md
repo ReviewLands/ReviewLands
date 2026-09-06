@@ -145,7 +145,7 @@ A ghost second-call banner from a frozen SIM/RCS/caller-ID package. Restore thos
 .\redmi10.cmd fix-call
 ```
 
-Then reboot. See [commands/fix-call.md](commands/fix-call.md).
+Then reboot. If the line stays busy until you clear Phone cache, use the strong fix in [commands/fix-call.md](commands/fix-call.md) (resets Phone app settings, not the system call log).
 
 ## Manual ADB (no Python)
 

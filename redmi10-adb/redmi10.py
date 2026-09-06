@@ -430,11 +430,24 @@ def ads_off(log: Logger) -> None:
 
 
 def fix_calls(log: Logger) -> None:
-    print_header('Fix fake "Install secure call from null" during calls')
-    print("Re-enables SIM / RCS / caller-ID / dialer packages that can leave")
-    print("a ghost incoming-call banner after a debloat.")
+    print_header('Fix ghost Secure Call + line stays busy')
+    print("Same stuck Telecom call: fake banner, then busy until Phone cache is cleared.")
     print()
-    for pkg in load_list("restore-calls.txt"):
+
+    ok, detail = settings_put("global", "private_dns_mode", "opportunistic")
+    print(f"  [{'ok' if ok else 'warn'}] private_dns_mode=opportunistic")
+    log.write(f"fix-call dns -> {detail}")
+
+    result = shell("cmd role clear-role-holders android.app.role.CALL_SCREENING")
+    print("  cleared CALL_SCREENING role")
+    log.write(f"fix-call screening -> {(result.stdout or '')} {(result.stderr or '')}")
+
+    extras = (
+        "com.facebook.services",
+        "com.facebook.system",
+        "com.truecaller",
+    )
+    for pkg in load_list("restore-calls.txt") + list(extras):
         status, detail = enable_package(pkg)
         log.write(f"fix-call {pkg} -> {status} {detail}")
         if status in {"restored", "enabled"}:
@@ -443,9 +456,22 @@ def fix_calls(log: Logger) -> None:
             print(f"  [skip] {pkg}")
         else:
             print(f"  [fail] {pkg}: {detail}")
+
+    for command in (
+        "am force-stop com.google.android.dialer",
+        "am force-stop com.android.phone",
+        "am force-stop com.google.android.ims",
+        "pm clear --cache-only com.google.android.dialer",
+        "pm clear --cache-only com.android.phone",
+        "pm clear com.google.android.dialer",
+    ):
+        result = shell(command)
+        out = ((result.stdout or "") + (result.stderr or "")).strip()
+        print(f"  {command}: {out or 'ok'}")
+        log.write(f"fix-call {command} -> {out or 'ok'}")
+
     print()
-    print("Reboot once, then make a test call.")
-    print("If the popup remains: Settings → Connection & sharing → Private DNS → Automatic")
+    print("Reboot, then test: make a call, hang up, have someone call you.")
 
 
 def enhance(log: Logger) -> None:

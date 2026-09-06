@@ -366,19 +366,19 @@ goto :eof
 :fix_call_work
 echo.
 echo ================================================================
-echo  Fix fake "Install secure call from null" during calls
+echo  Fix ghost Secure Call + line stays busy
 echo ================================================================
-echo That banner is a ghost second call from a disabled SIM/RCS/caller-ID
-echo package. Re-enabling those packages now.
+echo Turning off Private DNS ad-block for call lookups...
+"%ADB%" shell settings put global private_dns_mode opportunistic
+echo Clearing call-screening role...
+"%ADB%" shell cmd role clear-role-holders android.app.role.CALL_SCREENING
 echo.
 for %%P in (
   com.xiaomi.simactivate.service
-  com.xiaomi.mircs
   com.miui.yellowpage
-  com.xiaomi.mi_connect_service
-  com.android.carrierdefaultapp
   com.google.android.ims
   com.android.ims
+  com.android.carrierdefaultapp
   com.google.android.dialer
   com.android.phone
   com.android.incallui
@@ -390,11 +390,20 @@ for %%P in (
   com.google.android.apps.messaging
   com.android.stk
   com.android.stk2
+  com.facebook.services
+  com.facebook.system
+  com.truecaller
 ) do call :enable_pkg %%P
 echo.
-echo Reboot the phone once, then make a test call.
-echo If the popup is still there, set Private DNS to Automatic and try again:
-echo   Settings - Connection ^& sharing - Private DNS - Automatic
+echo Ending the stuck Telecom call ^(same effect as clearing Phone cache^)...
+"%ADB%" shell am force-stop com.google.android.dialer
+"%ADB%" shell am force-stop com.android.phone
+"%ADB%" shell am force-stop com.google.android.ims
+"%ADB%" shell pm clear --cache-only com.google.android.dialer
+"%ADB%" shell pm clear --cache-only com.android.phone
+"%ADB%" shell pm clear com.google.android.dialer
+echo.
+echo Reboot, then test: make a call, hang up, have someone call you.
 goto :eof
 
 :need_device
