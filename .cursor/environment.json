@@ -1,0 +1,4 @@
+{
+  "name": "ReviewLands document toolkit",
+  "install": "bash .cursor/install.sh"
+}
