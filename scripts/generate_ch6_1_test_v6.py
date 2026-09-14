@@ -208,22 +208,115 @@ SOLUTIONS_HTML = r"""<!DOCTYPE html>
 </html>
 """
 
+INDEX_HTML = """<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chapter 6.1 Class Test — PDF Download</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Noto Sans Arabic', sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f4f6f8;
+    color: #111;
+    padding: 24px;
+  }
+  .card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,.08);
+    max-width: 480px;
+    width: 100%;
+    padding: 32px 28px;
+    text-align: center;
+  }
+  h1 {
+    font-size: 1.25rem;
+    margin: 0 0 4px;
+    line-height: 1.4;
+  }
+  .en {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: .95rem;
+    color: #444;
+    margin: 0 0 24px;
+    direction: ltr;
+  }
+  .downloads { display: flex; flex-direction: column; gap: 12px; }
+  a.btn {
+    display: block;
+    padding: 14px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: background .15s;
+  }
+  a.primary {
+    background: #1a56db;
+    color: #fff;
+  }
+  a.primary:hover { background: #1446b8; }
+  a.secondary {
+    background: #e8edf5;
+    color: #1a56db;
+  }
+  a.secondary:hover { background: #d5deed; }
+  .links {
+    margin-top: 20px;
+    font-size: .8rem;
+    color: #666;
+    direction: ltr;
+  }
+  .links a { color: #1a56db; word-break: break-all; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>اختبار الفصل ٦.١ — المعادلات المتزامنة</h1>
+  <p class="en">Chapter 6.1 Class Test — Simultaneous Equations</p>
+  <div class="downloads">
+    <a class="btn primary" href="Class_Test_Chapter_6_1_v6.pdf" download="Class_Test_Chapter_6_1_v6.pdf">
+      تحميل ورقة الأسئلة (PDF)
+    </a>
+    <a class="btn secondary" href="Class_Test_Chapter_6_1_v6_Solutions.pdf" download="Class_Test_Chapter_6_1_v6_Solutions.pdf">
+      تحميل الحلول (PDF)
+    </a>
+  </div>
+  <p class="links">
+    <a href="Class_Test_Chapter_6_1_v6.html">View question paper (HTML)</a><br>
+    <a href="Class_Test_Chapter_6_1_v6_Solutions.html">View solutions (HTML)</a>
+  </p>
+</div>
+</body>
+</html>
+"""
+
 
 def main():
     workspace = Path("/workspace")
     html_q = workspace / "Class_Test_Chapter_6_1_v6.html"
     html_s = workspace / "Class_Test_Chapter_6_1_v6_Solutions.html"
+    html_index = workspace / "index.html"
     pdf_q = workspace / "Class_Test_Chapter_6_1_v6.pdf"
     pdf_s = workspace / "Class_Test_Chapter_6_1_v6_Solutions.pdf"
 
     html_q.write_text(HTML, encoding="utf-8")
     html_s.write_text(SOLUTIONS_HTML, encoding="utf-8")
+    html_index.write_text(INDEX_HTML, encoding="utf-8")
 
     from weasyprint import HTML as WHTML
 
     WHTML(string=HTML, base_url=str(workspace)).write_pdf(str(pdf_q))
     WHTML(string=SOLUTIONS_HTML, base_url=str(workspace)).write_pdf(str(pdf_s))
-    print("Created:", pdf_q, pdf_s)
+    print("Created:", pdf_q, pdf_s, html_index)
 
 
 if __name__ == "__main__":
