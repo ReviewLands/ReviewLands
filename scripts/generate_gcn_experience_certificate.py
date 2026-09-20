@@ -1,0 +1,315 @@
+#!/usr/bin/env python3
+"""Generate Grameen CyberNet Ltd. experience certificate (HTML + PDF)."""
+from pathlib import Path
+
+CERTIFICATE_HTML = r"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Experience Certificate — Md. Nojir Hossain</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Source+Sans+3:wght@400;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Source Sans 3', 'Segoe UI', sans-serif;
+    font-size: 11pt;
+    color: #1a1a1a;
+    background: #fff;
+  }
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    padding: 14mm 16mm 16mm;
+    position: relative;
+    background:
+      linear-gradient(180deg, #f8fbfa 0%, #fff 28mm, #fff 100%);
+  }
+
+  /* Letterhead */
+  .letterhead {
+    border-bottom: 3px solid #0b6b4f;
+    padding-bottom: 10px;
+    margin-bottom: 14px;
+    display: grid;
+    grid-template-columns: 72px 1fr auto;
+    gap: 12px;
+    align-items: center;
+  }
+  .logo-mark {
+    width: 64px;
+    height: 64px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #0b6b4f 0%, #14a87a 100%);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: -0.5px;
+    box-shadow: 0 2px 8px rgba(11,107,79,.25);
+  }
+  .company-block h1 {
+    margin: 0;
+    font-size: 17pt;
+    font-weight: 700;
+    color: #0b6b4f;
+    letter-spacing: 0.3px;
+    line-height: 1.15;
+  }
+  .company-block .tagline {
+    margin: 2px 0 0;
+    font-size: 9pt;
+    color: #555;
+    font-style: italic;
+  }
+  .company-block .addr {
+    margin: 4px 0 0;
+    font-size: 8.5pt;
+    color: #444;
+    line-height: 1.35;
+  }
+  .contact-mini {
+    text-align: right;
+    font-size: 8pt;
+    color: #444;
+    line-height: 1.45;
+  }
+  .contact-mini a { color: #0b6b4f; text-decoration: none; }
+
+  .ref-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 9.5pt;
+    margin: 8px 0 18px;
+    color: #333;
+  }
+  .ref-row strong { font-weight: 600; }
+
+  .title {
+    text-align: center;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 22pt;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #0b3d2e;
+    margin: 0 0 20px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #c5ddd4;
+  }
+
+  .body-text {
+    text-align: justify;
+    line-height: 1.65;
+    margin: 0 0 14px;
+    font-size: 11pt;
+  }
+  .body-text .emph { font-weight: 700; }
+
+  .clause {
+    margin: 12px 0;
+    padding-left: 0;
+  }
+
+  .closing {
+    margin-top: 22px;
+    font-size: 10.5pt;
+  }
+
+  .sign-block {
+    margin-top: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+  }
+  .sign-left { flex: 1; }
+  .signature-script {
+    font-family: 'Great Vibes', cursive;
+    font-size: 42pt;
+    color: #1a3a5c;
+    line-height: 0.9;
+    margin: 0 0 -4px;
+    padding-left: 8px;
+  }
+  .sign-line {
+    width: 200px;
+    border-top: 1px solid #333;
+    margin-bottom: 6px;
+  }
+  .sign-name {
+    font-weight: 700;
+    font-size: 10.5pt;
+    color: #111;
+  }
+  .sign-title {
+    font-size: 9.5pt;
+    color: #333;
+    line-height: 1.35;
+  }
+
+  .seal-wrap {
+    flex-shrink: 0;
+    text-align: center;
+  }
+  .seal-wrap svg {
+    width: 108px;
+    height: 108px;
+    display: block;
+    margin: 0 auto 4px;
+  }
+  .seal-caption {
+    font-size: 7.5pt;
+    color: #666;
+    max-width: 120px;
+    line-height: 1.25;
+  }
+
+  .footer-note {
+    position: absolute;
+    bottom: 12mm;
+    left: 16mm;
+    right: 16mm;
+    border-top: 1px solid #e0e0e0;
+    padding-top: 6px;
+    font-size: 7.5pt;
+    color: #777;
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  .watermark {
+    position: absolute;
+    top: 42%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-28deg);
+    font-size: 52pt;
+    font-weight: 700;
+    color: rgba(11, 107, 79, 0.04);
+    letter-spacing: 8px;
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="watermark">GRAMEEN CYBERNET</div>
+
+  <header class="letterhead">
+    <div class="logo-mark">GCN</div>
+    <div class="company-block">
+      <h1>Grameen CyberNet Ltd.</h1>
+      <p class="tagline">Internet is Easier With Us</p>
+      <p class="addr">
+        Head Office: RM Centre (4th Floor), 101 Gulshan Avenue, Dhaka-1212, Bangladesh<br>
+        Corporate Office: RM Centre (3rd Floor), 101 Gulshan Avenue, Dhaka-1212
+      </p>
+    </div>
+    <div class="contact-mini">
+      Tel: 01678-004553<br>
+      support@citechco.net<br>
+      <a href="https://www.grameencybernet.net/">www.grameencybernet.net</a>
+    </div>
+  </header>
+
+  <div class="ref-row">
+    <span><strong>Ref. No.:</strong> GCN/HR/EXP/2018/0847</span>
+    <span><strong>Date:</strong> 01 January 2018</span>
+  </div>
+
+  <h2 class="title">Experience Certificate</h2>
+
+  <p class="body-text">
+    This is to certify that <span class="emph">Mr. Md. Nojir Hossain</span>, son of
+    <span class="emph">Mr. Abdul Hasim</span> and <span class="emph">Mrs. Begum Akter</span>,
+    was employed with <span class="emph">Grameen CyberNet Ltd.</span> (an ISO-compliant Internet
+    Service Provider and IT solutions company, operating nationwide from Dhaka, Bangladesh) for the
+    period from <span class="emph">06 June 2015</span> to <span class="emph">01 January 2018</span>.
+  </p>
+
+  <p class="body-text clause">
+    During his tenure with the company, he served in the capacity of
+    <span class="emph">Technical Support &amp; Network Operations Officer</span> in the
+    Technical &amp; Customer Care Division. He was responsible for assisting subscribers,
+    monitoring network connectivity, coordinating field-level support, and maintaining
+    service quality in accordance with company policy and BTRC guidelines.
+  </p>
+
+  <p class="body-text clause">
+    We found him sincere, disciplined, and cooperative with colleagues and management. He
+    discharged his duties with diligence and maintained a satisfactory standard of professional
+    conduct throughout his employment. His character and conduct during the service period
+    were good.
+  </p>
+
+  <p class="body-text clause">
+    He left the organization on <span class="emph">01 January 2018</span> upon completion of
+    his engagement with us. We wish him every success in his future career.
+  </p>
+
+  <p class="closing">
+    This certificate is issued at the request of the concerned employee for whatever legal
+    purpose it may serve.
+  </p>
+
+  <div class="sign-block">
+    <div class="sign-left">
+      <p class="signature-script">Md.</p>
+      <div class="sign-line"></div>
+      <p class="sign-name">Ghulam Mohiuddin</p>
+      <p class="sign-title">Chief Executive Officer &amp; Managing Director<br>Grameen CyberNet Ltd.</p>
+    </div>
+    <div class="seal-wrap">
+      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-label="Company seal">
+        <defs>
+          <path id="topArc" d="M 30,100 A 70,70 0 0,1 170,100"/>
+          <path id="botArc" d="M 35,108 A 65,65 0 0,0 165,108"/>
+        </defs>
+        <circle cx="100" cy="100" r="92" fill="none" stroke="#0b6b4f" stroke-width="3"/>
+        <circle cx="100" cy="100" r="84" fill="none" stroke="#0b6b4f" stroke-width="1.5"/>
+        <circle cx="100" cy="100" r="76" fill="none" stroke="#c41e3a" stroke-width="1" opacity="0.85"/>
+        <text font-family="Source Sans 3, Arial, sans-serif" font-size="11" font-weight="700" fill="#0b6b4f">
+          <textPath href="#topArc" startOffset="50%" text-anchor="middle">GRAMEEN CYBERNET LTD.</textPath>
+        </text>
+        <text font-family="Source Sans 3, Arial, sans-serif" font-size="9" font-weight="600" fill="#0b6b4f">
+          <textPath href="#botArc" startOffset="50%" text-anchor="middle">DHAKA · BANGLADESH</textPath>
+        </text>
+        <text x="100" y="96" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="22" font-weight="700" fill="#0b3d2e">GCN</text>
+        <text x="100" y="118" text-anchor="middle" font-family="Source Sans 3, Arial, sans-serif" font-size="7" fill="#555">EST. 1996</text>
+        <polygon points="100,52 103,62 113,62 105,69 108,79 100,73 92,79 95,69 87,62 97,62" fill="#c41e3a" opacity="0.9"/>
+      </svg>
+      <p class="seal-caption">Official Seal<br>(Human Resources)</p>
+    </div>
+  </div>
+
+  <footer class="footer-note">
+    Grameen CyberNet Ltd. · Nationwide Internet Service Provider · Member, ISP Association of Bangladesh (ISPAB)
+  </footer>
+</div>
+</body>
+</html>
+"""
+
+
+def main():
+    out_dir = Path("/workspace/certificates")
+    out_dir.mkdir(parents=True, exist_ok=True)
+    html_path = out_dir / "Md_Nojir_Hossain_GCN_Experience_Certificate.html"
+    pdf_path = out_dir / "Md_Nojir_Hossain_GCN_Experience_Certificate.pdf"
+
+    html_path.write_text(CERTIFICATE_HTML, encoding="utf-8")
+
+    from weasyprint import HTML as WHTML
+
+    WHTML(string=CERTIFICATE_HTML, base_url=str(out_dir)).write_pdf(str(pdf_path))
+    print("Created:", html_path, pdf_path)
+
+
+if __name__ == "__main__":
+    main()
