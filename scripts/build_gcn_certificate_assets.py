@@ -4,88 +4,175 @@ import math
 import random
 from pathlib import Path
 
+import numpy as np
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 ASSETS = Path("/workspace/certificates/assets")
 ASSETS.mkdir(parents=True, exist_ok=True)
 
+# Typical rubber-stamp pad inks (Bangladesh corporate seals)
+INK_BLUE = np.array([22, 68, 138], dtype=np.float32)
+INK_RED = np.array([178, 32, 52], dtype=np.float32)
+INK_GRAY = np.array([58, 58, 58], dtype=np.float32)
+
 
 def _load_logo_icon(size: int = 88) -> Image.Image:
     logo = Image.open(ASSETS / "gcn-logo.png").convert("RGBA")
-    # Crop to circular icon portion (left part of wide banner)
     _, h = logo.size
     side = h
     icon = logo.crop((0, 0, side, h)).resize((size, size), Image.Resampling.LANCZOS)
     return icon
 
 
+def _blur_array(channel: np.ndarray, sigma: float = 3.0) -> np.ndarray:
+    ch = channel.astype(np.float32)
+    lo, hi = ch.min(), ch.max()
+    if hi - lo < 1e-6:
+        return ch
+    norm = (ch - lo) / (hi - lo)
+    img = Image.fromarray((norm * 255).astype(np.uint8), mode="L")
+    img = img.filter(ImageFilter.GaussianBlur(sigma))
+    blurred = np.array(img).astype(np.float32) / 255.0
+    return blurred * (hi - lo) + lo
+
+
+def _apply_ink_pad_effect(seal: Image.Image, seed: int = 42) -> Image.Image:
+    """Simulate uneven ink transfer from rubber stamp onto paper."""
+    rng = np.random.default_rng(seed)
+    arr = np.array(seal).astype(np.float32)
+    h, w = arr.shape[:2]
+    cx, cy = w / 2.0, h / 2.0
+
+    yy, xx = np.mgrid[0:h, 0:w]
+    dist = np.sqrt((xx - cx) ** 2 + (yy - cy) ** 2)
+    max_r = min(cx, cy) * 0.98
+
+    # Hand-press: slightly heavier on lower-right (common stamp angle)
+    pressure = 1.0 - 0.28 * (dist / max_r) ** 1.35
+    pressure *= 1.0 + 0.12 * ((xx - cx) / w + (yy - cy) / h)
+
+    # Large blotches (dry pad / uneven sponge)
+    blot = rng.normal(1.0, 0.18, (h, w)).astype(np.float32)
+    blot = _blur_array(blot, sigma=14)
+    blot = np.clip(blot, 0.45, 1.15)
+
+    # Fine grain
+    grain = rng.normal(1.0, 0.08, (h, w)).astype(np.float32)
+    grain = _blur_array(grain, sigma=1.2)
+    grain = np.clip(grain, 0.7, 1.25)
+
+    ink_mask = pressure * blot * grain
+
+    # Occasional micro skips (paper texture / missed ink)
+    skips = rng.random((h, w)) > 0.992
+    ink_mask[skips] *= 0.15
+
+    alpha = arr[:, :, 3] / 255.0
+    alpha = alpha * ink_mask
+    alpha = np.clip(alpha, 0, 1)
+
+    # Ink on paper: slightly desaturate + multiply-like darkening on RGB
+    rgb = arr[:, :, :3]
+    for c in range(3):
+        rgb[:, :, c] = rgb[:, :, c] * (0.85 + 0.15 * ink_mask)
+
+    out = np.zeros_like(arr)
+    out[:, :, :3] = np.clip(rgb, 0, 255)
+    out[:, :, 3] = alpha * 255.0
+
+    result = Image.fromarray(out.astype(np.uint8), "RGBA")
+    # Soft stamp edge bleed (ink spreads on paper fibres)
+    result = result.filter(ImageFilter.GaussianBlur(0.55))
+    return result
+
+
+def _draw_arc_text(
+    base: Image.Image,
+    text: str,
+    cx: int,
+    cy: int,
+    radius: int,
+    start_deg: float,
+    end_deg: float,
+    font: ImageFont.FreeTypeFont,
+    ink: np.ndarray,
+    alpha: int,
+) -> None:
+    for i, ch in enumerate(text):
+        t = i / max(len(text) - 1, 1)
+        ang = math.radians(start_deg + (end_deg - start_deg) * t)
+        x = cx + int(radius * math.cos(ang))
+        y = cy + int(radius * math.sin(ang))
+        ch_img = Image.new("RGBA", (34, 34), (0, 0, 0, 0))
+        color = tuple(ink.astype(int)) + (alpha,)
+        ImageDraw.Draw(ch_img).text((2, 2), ch, fill=color, font=font)
+        ch_img = ch_img.rotate(-math.degrees(ang) - 90, expand=True)
+        base.alpha_composite(ch_img, (x - ch_img.width // 2, y - ch_img.height // 2))
+
+
 def build_seal(path: Path) -> None:
     random.seed(42)
-    size = 520
+    size = 560
     img = Image.new("RGBA", (size, size), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
     cx, cy = size // 2, size // 2
 
-    # Outer stamp ring (Bangladesh corporate seal style: blue + inner red)
-    for r, color, width in [
-        (238, (18, 72, 140, 210), 10),
-        (222, (196, 30, 58, 185), 5),
-        (206, (18, 72, 140, 170), 3),
-    ]:
-        draw.ellipse((cx - r, cy - r, cx + r, cy + r), outline=color, width=width)
-
-    # Distressed ink specks
-    speck = Image.new("RGBA", (size, size), (0, 0, 0, 0))
-    sd = ImageDraw.Draw(speck)
-    for _ in range(900):
-        x = random.randint(40, size - 40)
-        y = random.randint(40, size - 40)
-        if math.hypot(x - cx, y - cy) > 120 and math.hypot(x - cx, y - cy) < 245:
-            sd.ellipse((x, y, x + 2, y + 2), fill=(18, 72, 140, random.randint(20, 70)))
-    speck = speck.filter(ImageFilter.GaussianBlur(0.6))
-    img = Image.alpha_composite(img, speck)
-
-    # Circular text (simplified arcs using repeated chars)
     try:
-        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 22)
-        font_sm = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 16)
+        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 23)
+        font_sm = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 17)
     except OSError:
         font = ImageFont.load_default()
         font_sm = font
 
-    top_text = "GRAMEEN CYBERNET LTD."
-    bottom_text = "DHAKA · BANGLADESH"
-    for i, ch in enumerate(top_text):
-        ang = math.radians(200 + (i / max(len(top_text) - 1, 1)) * 140)
-        x = cx + int(188 * math.cos(ang))
-        y = cy + int(188 * math.sin(ang))
-        ch_img = Image.new("RGBA", (30, 30), (0, 0, 0, 0))
-        ImageDraw.Draw(ch_img).text((2, 2), ch, fill=(18, 72, 140, 220), font=font)
-        ch_img = ch_img.rotate(-math.degrees(ang) - 90, expand=True)
-        img.alpha_composite(ch_img, (x - ch_img.width // 2, y - ch_img.height // 2))
+    # Ink-pad rings (slightly irregular widths)
+    for r, ink, width, alpha in [
+        (242, INK_BLUE, 11, 200),
+        (226, INK_RED, 6, 185),
+        (210, INK_BLUE, 4, 165),
+    ]:
+        col = tuple(ink.astype(int)) + (alpha,)
+        draw.ellipse((cx - r, cy - r, cx + r, cy + r), outline=col, width=width)
 
-    for i, ch in enumerate(bottom_text):
-        ang = math.radians(20 + (i / max(len(bottom_text) - 1, 1)) * 140)
-        x = cx + int(170 * math.cos(ang))
-        y = cy + int(170 * math.sin(ang))
-        ch_img = Image.new("RGBA", (24, 24), (0, 0, 0, 0))
-        ImageDraw.Draw(ch_img).text((1, 1), ch, fill=(196, 30, 58, 210), font=font_sm)
-        ch_img = ch_img.rotate(-math.degrees(ang) - 90, expand=True)
-        img.alpha_composite(ch_img, (x - ch_img.width // 2, y - ch_img.height // 2))
+    _draw_arc_text(
+        img,
+        "GRAMEEN CYBERNET LTD.",
+        cx,
+        cy,
+        192,
+        200,
+        340,
+        font,
+        INK_BLUE,
+        215,
+    )
+    _draw_arc_text(
+        img,
+        "DHAKA · BANGLADESH",
+        cx,
+        cy,
+        174,
+        22,
+        158,
+        font_sm,
+        INK_RED,
+        200,
+    )
 
-    icon = _load_logo_icon(120)
+    icon = _load_logo_icon(124)
     mask = Image.new("L", icon.size, 0)
     ImageDraw.Draw(mask).ellipse((2, 2, icon.size[0] - 2, icon.size[1] - 2), fill=255)
     icon.putalpha(mask)
-    img.alpha_composite(icon, (cx - 60, cy - 66))
+    img.alpha_composite(icon, (cx - 62, cy - 68))
 
-    est = Image.new("RGBA", (120, 24), (0, 0, 0, 0))
-    ImageDraw.Draw(est).text((0, 0), "EST. 1996", fill=(60, 60, 60, 220), font=font_sm)
-    img.alpha_composite(est, (cx - 48, cy + 52))
+    est = Image.new("RGBA", (130, 26), (0, 0, 0, 0))
+    ImageDraw.Draw(est).text(
+        (0, 0), "EST. 1996", fill=tuple(INK_GRAY.astype(int)) + (210,), font=font_sm
+    )
+    img.alpha_composite(est, (cx - 50, cy + 54))
 
-    # Slight rotation + ink bleed for stamped look
-    img = img.rotate(-11, resample=Image.Resampling.BICUBIC, expand=True)
-    img = img.filter(ImageFilter.GaussianBlur(0.35))
+    img = _apply_ink_pad_effect(img, seed=42)
+    # Stamp placement angle (pressed onto paper)
+    img = img.rotate(-13.5, resample=Image.Resampling.BICUBIC, expand=True)
     img.save(path, "PNG")
 
 
@@ -95,7 +182,6 @@ def build_signature(path: Path) -> None:
     img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
 
-    # Pen strokes approximating "Ghulam Mohiuddin"
     ink = (12, 52, 122, 235)
     strokes = [
         [(18, 128), (42, 95), (78, 88), (118, 102), (156, 138)],
@@ -110,7 +196,6 @@ def build_signature(path: Path) -> None:
             draw.line([stroke[i], stroke[i + 1]], fill=ink, width=3, joint="curve")
     draw.line([(602, 132), (622, 118)], fill=ink, width=2)
 
-    # Light pressure variation
     blur = img.filter(ImageFilter.GaussianBlur(0.45))
     img = Image.alpha_composite(img, blur)
     img.save(path, "PNG")

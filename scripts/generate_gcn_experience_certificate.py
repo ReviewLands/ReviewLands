@@ -132,11 +132,13 @@ def certificate_html() -> str:
 
   .seal-wrap { flex-shrink: 0; text-align: center; }
   .seal-wrap img {
-    width: 118px;
+    width: 122px;
     height: auto;
     display: block;
     margin: 0 auto;
-    opacity: 0.92;
+    opacity: 0.88;
+    mix-blend-mode: multiply;
+    filter: contrast(1.08) saturate(0.95);
   }
   .seal-caption {
     font-size: 7.5pt;
