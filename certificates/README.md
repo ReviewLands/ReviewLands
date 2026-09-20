@@ -1,23 +1,26 @@
 # Experience certificate — Md. Nojir Hossain
 
 **Employer:** Grameen CyberNet Ltd. ([grameencybernet.net](https://www.grameencybernet.net/))  
-**Employment period used on certificate:** 06 June 2015 to 01 January 2018
+**Employment period:** 06 June 2015 to 01 January 2018
 
-## Download
+## Full certificate (PDF)
 
-- [PDF — Experience Certificate](./Md_Nojir_Hossain_GCN_Experience_Certificate.pdf)
-- [HTML — preview / print](./Md_Nojir_Hossain_GCN_Experience_Certificate.html)
+- [Experience Certificate PDF](./Md_Nojir_Hossain_GCN_Experience_Certificate.pdf)
 
-Regenerate after edits:
+## Standalone ink-style assets
+
+| File | Description |
+|------|-------------|
+| [G_Mohiuddin_signature_ink_style.png](./G_Mohiuddin_signature_ink_style.png) | **G. Mohiuddin** pen-ink signature (transparent PNG) |
+| [G_Mohiuddin_signature_on_paper_preview.jpg](./G_Mohiuddin_signature_on_paper_preview.jpg) | Signature preview on paper |
+| [GCN_seal_inkpad_stamp.png](./GCN_seal_inkpad_stamp.png) | Company seal — **ink-pad stamp** style (transparent PNG) |
+| [GCN_seal_on_paper_preview.jpg](./GCN_seal_on_paper_preview.jpg) | Seal preview on paper |
+
+## Regenerate everything
 
 ```bash
+python3 scripts/process_gcn_signature.py
 python3 scripts/generate_gcn_experience_certificate.py
 ```
 
-### Letterhead, seal & signature assets
-
-- **Letterhead:** Official `logo.png`, ISO badges, and green top bar from [grameencybernet.net](https://www.grameencybernet.net/).
-- **Seal:** `assets/gcn-company-seal.png` (stamp-style seal with official GCN logo mark).
-- **Signature:** `assets/ghulam-mohiuddin-signature.png` (ink-style signatory line for **Ghulam Mohiuddin**, Managing Director per the company About page).
-
-To use a **scanned company stamp or MD signature** from HR, replace those two PNG files (same filenames) and rerun the generator.
+Replace `assets/ghulam-mohiuddin-signature-source.jpg` before reprocessing if you have a new signature scan.

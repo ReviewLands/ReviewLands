@@ -243,7 +243,9 @@ def certificate_html() -> str:
 
 def main():
     from build_gcn_certificate_assets import main as build_assets
+    from process_gcn_signature import main as process_signature
 
+    process_signature()
     build_assets()
 
     out_dir = Path("/workspace/certificates")
