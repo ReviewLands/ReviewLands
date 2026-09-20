@@ -118,8 +118,10 @@ def build_signature(path: Path) -> None:
 
 def main():
     build_seal(ASSETS / "gcn-company-seal.png")
-    build_signature(ASSETS / "ghulam-mohiuddin-signature.png")
-    print("Built:", ASSETS / "gcn-company-seal.png", ASSETS / "ghulam-mohiuddin-signature.png")
+    sig_path = ASSETS / "ghulam-mohiuddin-signature.png"
+    if not sig_path.exists():
+        build_signature(sig_path)
+    print("Built:", ASSETS / "gcn-company-seal.png", sig_path)
 
 
 if __name__ == "__main__":

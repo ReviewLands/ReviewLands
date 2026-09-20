@@ -115,10 +115,12 @@ def certificate_html() -> str:
   }
   .sign-left { flex: 1; min-width: 0; }
   .signature-img {
-    height: 58px;
+    height: 52px;
     width: auto;
+    max-width: 240px;
     display: block;
-    margin: 0 0 2px;
+    margin: 0 0 0;
+    image-rendering: auto;
   }
   .sign-line {
     width: 220px;
