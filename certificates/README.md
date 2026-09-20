@@ -12,7 +12,7 @@
 | File | Description |
 |------|-------------|
 | [G_Mohiuddin_signature_ink_style.png](./G_Mohiuddin_signature_ink_style.png) | **G. Mohiuddin** pen-ink signature (transparent PNG) |
-| [G_Mohiuddin_signature_on_paper_preview.jpg](./G_Mohiuddin_signature_on_paper_preview.jpg) | Signature preview on paper |
+| [G_Mohiuddin_signature_on_paper_preview.png](./G_Mohiuddin_signature_on_paper_preview.png) | Signature preview on paper |
 | [GCN_seal_inkpad_stamp.png](./GCN_seal_inkpad_stamp.png) | Company seal — **ink-pad stamp** style (transparent PNG) |
 | [GCN_seal_on_paper_preview.jpg](./GCN_seal_on_paper_preview.jpg) | Seal preview on paper |
 
