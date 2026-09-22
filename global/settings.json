@@ -1,0 +1,20 @@
+{
+  "site_name": "FastestImageConvert",
+  "tagline": "Fast. Private. Instant image conversion.",
+  "base_url": "https://fastestimageconvert.com/",
+  "meta_description": "FastestImageConvert - convert HEIC, JPG, PNG, WebP instantly in your browser. No upload, private and ultra-fast.",
+  "meta_keywords": "heic to jpg, image convert, webp converter, fast image conversion",
+  "primary_color": "#0b76ff",
+  "ads_enabled": false,
+  "footer_links": {
+    "Privacy Policy": "/privacy",
+    "Terms": "/terms",
+    "Contact": "/contact"
+  },
+  "tools": [
+    "convert-heic-to-jpg",
+    "pdf-to-jpg",
+    "png-to-webp",
+    "jpg-to-png"
+  ]
+}
